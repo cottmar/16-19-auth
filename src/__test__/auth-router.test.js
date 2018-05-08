@@ -35,4 +35,24 @@ describe('AUTH Router', () => {
         expect(response.status).toEqual(400);
       });
   });
+  test('POST should return a 409 status code, no duplicates', () => {
+    return superagent.post(apiURL)
+      .send({
+        username: 'billie',
+        email: 'billie@billie.com',
+        password: 'nobirdieisthebest',
+      })
+      .then(() => {
+        return superagent.post(apiURL)
+          .send({
+            username: 'billie',
+            email: 'billie@billie.com',
+            password: 'nobirdieisthebest',
+          })
+          .then((Promise.reject))
+          .catch((err) => {
+            expect(err.status).toEqual(409);
+          });
+      });
+  });
 });
