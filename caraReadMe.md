@@ -2,7 +2,11 @@
 Cara Ottmar, Version 1.0.0
 
 #Overview
-Implement an in-order traversal function that returns a string of the visited nodes.
+-Create middleware for parsing a Basic Authentication header, it should add an Account to the request object.
+
+-Create middleware for parsing a Bearer Authorization header, it should add an Account to the request object.
+
+-Create a model with at least four properties that belongs to an account. The model should require an account id associated to an account.
 
 #Architecture
 README.md** - contains documentation
@@ -23,11 +27,13 @@ src/** - contains the remaining code
   -main.js** - starts the server
 
 #Change Log
-5-7-2018 4:00pm - forked lab and built architecture and typed in starter code
- 5-7-2018 4:45pm - added 400 code and passed test
- 5-7-2018 5:15pm - started working on 409 dupe test
- 5-7-2018 7:00pm - got 409 test to pass
+5-8-2018 4:00pm - Started putting in "starter code" additions
+5-8-2018 6:30pm - Starter code debugged and tests passing
+5-8-2018 7:00pm - Made "Dogs" resource
+5-8-2018 7:15pm - added POST and GET for Dogs
+5-8-2018 7:30pm - working on testing for POST and GET
+5-8-2018 7:45pm - only able to get 9/10 tests passing
+
 
 #Credits
-Seth for helping me while he was off the clock and I was in crisis-mode. Joy for helping me debug.
-Lacy and Sarah B for help on 409. 
+Judy and Joy for helping me debug!! 

@@ -43,6 +43,17 @@ describe('POST /dogss', () => {
         expect(response.status).toEqual(400);
       });
   });
+  test('POST /api/dogss/:id should return a 404 status code for route not found', () => {
+    return superagent.post(`${apiURL}/missing`)
+      .send({
+        email: 'billie@billie.com',
+      })
+      .then(Promise.reject)
+      .catch((response) => {
+        expect(response.status).toEqual(404);
+      });
+  });
+
   describe('GET /api/dogss/:id', () => {
     test('GET /api/doggs/:id should get a 200 status code and a TOKEN', () => {
       return pCreateAccountMock()
@@ -59,14 +70,24 @@ describe('POST /dogss', () => {
         });
     });
   });
-  test('POST /api/dogss/:id should return a 400 status code for a bad route', () => {
-    return superagent.post(`${apiURL}/dogss`)
+  test('GET /api/dogss/:id should return a 400 status code for a bad route', () => {
+    return superagent.get(`${apiURL}/dogsss/:wrongid`)
       .send({
         email: 'billie@billie.com',
       })
       .then(Promise.reject)
       .catch((response) => {
         expect(response.status).toEqual(400);
+      });
+  });
+  test('GET /api/dogss/:id should return a 404 status code for route not found', () => {
+    return superagent.get(`${apiURL}/`)
+      .send({
+        email: 'billie@billie.com',
+      })
+      .then(Promise.reject)
+      .catch((response) => {
+        expect(response.status).toEqual(404);
       });
   });
 });
