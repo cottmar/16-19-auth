@@ -5,12 +5,13 @@ import logger from './logger';
 export default (error, request, response, next) => { // eslint-disable-line no-unused-vars
   logger.log(logger.ERROR, '__ERROR_MIDDLEWARE__');
   logger.log(logger.ERROR, error);
+  // might have the property error.status
 
   if (error.status) {
     logger.log(logger.INFO, `Responding with a ${error.status} code and message ${error.message}`);
     return response.sendStatus(error.status);
   }
-  // Vinicio - I know that if we are here, it's another type or error
+  // I know that if we are here, it's another type or error
   const errorMessage = error.message.toLowerCase();
 
   if (errorMessage.includes('objectid failed')) {
