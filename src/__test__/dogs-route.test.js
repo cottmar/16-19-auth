@@ -33,4 +33,40 @@ describe('POST /dogss', () => {
         expect(response.body.bio).toEqual('Three-legged Bird-Dog');
       });
   });
+  test('POST /dogss should return a 400 status code for a bad route', () => {
+    return superagent.post(`${apiURL}/dogss`)
+      .send({
+        email: 'billie@billie.com',
+      })
+      .then(Promise.reject)
+      .catch((response) => {
+        expect(response.status).toEqual(400);
+      });
+  });
+  describe('GET /api/dogss/:id', () => {
+    test('GET /api/doggs/:id should get a 200 status code and a TOKEN', () => {
+      return pCreateAccountMock()
+        .then((mock) => {
+          return superagent.get(`${apiURL}/dogss/:id`)
+            .auth(mock.request.username, mock.request.password); // this line is important
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.token).toBeTruthy();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  });
+  test('POST /api/dogss/:id should return a 400 status code for a bad route', () => {
+    return superagent.post(`${apiURL}/dogss`)
+      .send({
+        email: 'billie@billie.com',
+      })
+      .then(Promise.reject)
+      .catch((response) => {
+        expect(response.status).toEqual(400);
+      });
+  });
 });

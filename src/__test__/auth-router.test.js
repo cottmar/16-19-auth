@@ -59,7 +59,6 @@ describe('AUTH Router', () => {
     test('GET /login should get a 200 status code and a TOKEN', () => {
       return pCreateAccountMock()
         .then((mock) => {
-          // console.log('HELP', mock);
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, mock.request.password); // this line is important
         })
