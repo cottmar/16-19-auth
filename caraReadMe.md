@@ -32,7 +32,7 @@ src/** - contains the remaining code
 5-8-2018 7:00pm - Made "Dogs" resource
 5-8-2018 7:15pm - added POST and GET for Dogs
 5-8-2018 7:30pm - working on testing for POST and GET
-5-8-2018 7:45pm - only able to get 9/10 tests passing
+5-8-2018 7:45pm - only able to get 9/10 tests passing . 
 
 
 #Credits
