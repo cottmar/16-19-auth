@@ -82,5 +82,20 @@ describe('TESTING ROUTES AT /images', () => {
     //       console.log(error); 
     //     });
     // });
+    describe('DELETE 204 for successful deletion', () => {
+      test('should return status code 204', () => {
+        let testMock = null;
+        return pCreateImageMock()
+          .then((mockResponse) => {
+            testMock = mockResponse.image;
+            const { token } = mockResponse.accountMock;
+            return superagent.delete(`${apiUrl}/images/${testMock.id}`)
+              .set('Authorization', `Bearer ${token}`)
+              .then((response) => {
+                expect(response.status).toEqual(204);
+              });
+          });
+      });
+    });
   });
 });

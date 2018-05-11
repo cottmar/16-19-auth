@@ -20,33 +20,6 @@ imageRouter.post('/images', bearerAuthMiddleWare, multerUpload.any(), (request, 
   if (!request.body.title || request.files.length > 1 || request.files[0].fieldname !== 'image') {
     return next(new HttpError(400, 'IMAGE ROUTER __ERROR__ invalid request'));
   }
-
-  imageRouter.get('/api/images:id', (request, response, next) => { 
-    return Image.findById(request.params.id)
-      .then((image) => {
-        if (!image) {
-          logger.log(logger.ERROR, 'IMAGE ROUTER: responding with a 404 status code for !image');
-          return next(new HttpError(404, 'image not found'));
-        }
-        logger.log(logger.INFO, 'IMAGE ROUTER: responding with a 200 status code');
-        logger.log(logger.INFO, `IMAGE ROUTER: ${JSON.stringify(image)}`);
-        return response.json(image);
-      })
-      .catch(next);
-  });
-
-  // imageRouter.delete('api/images/:id', (request, response, next) => {
-  //   return Image.findByIdAndRemove(request.params.id)
-  //     .then((image) => {
-  //       if (!image) {
-  //         logger.log(logger.ERROR, 'IMAGE ROUTER: responding with 404 !image');
-  //         return next(new HttpErrors(404, 'image not found'));
-  //       }
-  //       logger.log(logger.INFO, 'IMAGE ROUTER: responding with 204 status code');
-  //       return response.sendStatus(204);
-  //     });
-  // });
-
   const file = request.files[0];
   const key = `${file.filename}.${file.originalname}`;
   return s3Upload(file.path, key)
@@ -60,5 +33,39 @@ imageRouter.post('/images', bearerAuthMiddleWare, multerUpload.any(), (request, 
     .then(image => response.json(image))
     .catch(next);
 });
+
+imageRouter.get('/api/images:id', (request, response, next) => { 
+  return Image.findById(request.params.id)
+    .then((image) => {
+      if (!image) {
+        logger.log(logger.ERROR, 'IMAGE ROUTER: responding with a 404 status code for !image');
+        return next(new HttpError(404, 'image not found'));
+      }
+      logger.log(logger.INFO, 'IMAGE ROUTER: responding with a 200 status code');
+      logger.log(logger.INFO, `IMAGE ROUTER: ${JSON.stringify(image)}`);
+      return response.json(image);
+    })
+    .catch(next);
+});
+
+imageRouter.delete('api/images/:id', bearerAuthMiddleWare, (request, response, next) => {
+  if (!request.params.id) {
+    console.log('IMAGE ROUTER: responding with a 404 !image_id');
+    return next(new HttpError(404, 'image not found '));
+  }
+  return Image.findById(request.params.id)
+    .then((image) => {
+      if (!image) {
+        return next(new HttpError(401, 'IMAGE ROUTER: no image found, bad request'));
+      }
+      logger.log(logger.INFO, 'IMAGE ROUTER: no content');
+      return s3Remove(image.url);
+    })
+    .then(() => {
+      return response.sendStatus(204);
+    })
+    .catch(next);
+});
+
 
 export default imageRouter;
