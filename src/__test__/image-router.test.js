@@ -38,4 +38,49 @@ describe('TESTING ROUTES AT /images', () => {
         });
     });
   });
+  describe('GET /api/images/:id', () => {
+    test('GET /api/images/:id should get a 200 status code and a TOKEN', () => {
+      return pCreateImageMock()
+        .then((mock) => {
+          return superagent.get(`${apiUrl}/images/:id`)
+            .auth(mock.request.username, mock.request.password); // this line is important
+        })
+        .then((response) => {
+          expect(response.status).toEqual(200);
+          expect(response.body.token).toBeTruthy();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+    test('GET /api/images/:id should return a 404 status code for a bad route', () => {
+      return superagent.get(`${apiUrl}/imagesss/:wrongid`)
+        .send({
+          title: 'title',
+        })
+        .then(Promise.reject)
+        .catch((response) => {
+          expect(response.status).toEqual(404);
+        });
+    });
+    test('GET /api/images/:id should return a 401 status code for a bad token', () => {
+      test('GET /api/images/:id should get a 400 status code and a TOKEN', () => {
+        const mock = null;
+        return pCreateImageMock()
+          .then((mock) => {
+            mock = mockResponse.image;
+            const { token } = mockResponse.accountMock;
+            return superagent.get(`${apiUrl}/images/${mock._id}`)
+              .set('Authorization', 'Bearer ${token}')
+              .then((response) => {
+                expect(response.status).toEqual(401);
+                expect(response.body.title).toEqual(mock.title);
+              });
+          });
+      })
+        .catch((error) => {
+          console.log(error); 
+        });
+    });
+  });
 });
