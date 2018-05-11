@@ -35,6 +35,18 @@ imageRouter.post('/images', bearerAuthMiddleWare, multerUpload.any(), (request, 
       .catch(next);
   });
 
+  // imageRouter.delete('api/images/:id', (request, response, next) => {
+  //   return Image.findByIdAndRemove(request.params.id)
+  //     .then((image) => {
+  //       if (!image) {
+  //         logger.log(logger.ERROR, 'IMAGE ROUTER: responding with 404 !image');
+  //         return next(new HttpErrors(404, 'image not found'));
+  //       }
+  //       logger.log(logger.INFO, 'IMAGE ROUTER: responding with 204 status code');
+  //       return response.sendStatus(204);
+  //     });
+  // });
+
   const file = request.files[0];
   const key = `${file.filename}.${file.originalname}`;
   return s3Upload(file.path, key)
