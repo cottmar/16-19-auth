@@ -26,6 +26,6 @@ const pCreateImageMock = () => {
     });
 };
 // this will return a promise
-const pRemoveImageMock = () => Promise.all([Account.remove({}, Image.remove({}))]);
+const pRemoveImageMock = () => Promise.all([Account.remove({}), Image.remove({})]);
 
 export { pCreateImageMock, pRemoveImageMock };

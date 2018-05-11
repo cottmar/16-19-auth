@@ -3,16 +3,16 @@
 import mongoose from 'mongoose';
 
 const imageSchema = mongoose.Schema({
-  title: {
+  title: { 
     type: String,
     required: true,
   },
   url: {
-    type: String, 
+    type: String,
     required: true,
   },
   createdOn: {
-    type: Date,
+    type: Date, 
     default: () => new Date(),
   },
   account: {

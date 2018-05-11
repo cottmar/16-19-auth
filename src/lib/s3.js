@@ -8,7 +8,8 @@ const s3Upload = (path, key) => {
 
   const uploadOptions = {
     Bucket: process.env.AWS_BUCKET, 
-    Key: 'public-read',
+    Key: key,
+    ACL: 'public-read',
     Body: fs.createReadStream(path), // creates readable stream (data that comes to us in chunks)
   };
   
@@ -37,3 +38,5 @@ const s3Remove = (key) => {
 
   return amazonS3.deleteObject(removeOptions).promise();
 };
+
+export { s3Upload, s3Remove };
