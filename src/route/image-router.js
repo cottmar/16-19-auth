@@ -6,7 +6,7 @@ import HttpError from 'http-errors';
 import bearerAuthMiddleWare from '../lib/bearer-auth-middleware';
 import Image from '../model/image';
 import logger from '../lib/logger';
-import { s3Upload, s3Remove } from '../lib/s3';
+import { s3Upload, s3Remove } from '../lib/s3'; //eslint-disable-line
 
 const multerUpload = multer({ dest: `${__dirname}/../temp` });
 
@@ -47,25 +47,40 @@ imageRouter.get('/api/images:id', (request, response, next) => {
     })
     .catch(next);
 });
-
-imageRouter.delete('api/images/:id', bearerAuthMiddleWare, (request, response, next) => {
-  if (!request.params.id) {
-    console.log('IMAGE ROUTER: responding with a 404 !image_id');
-    return next(new HttpError(404, 'image not found '));
-  }
-  return Image.findById(request.params.id)
+console.log('before delete');
+imageRouter.delete('/api/images/:id', bearerAuthMiddleWare, (request, response, next) => {
+  return Image.findByIdAndRemove(request.params.id)
     .then((image) => {
+      console.log('inside delete .thn');
       if (!image) {
-        return next(new HttpError(401, 'IMAGE ROUTER: no image found, bad request'));
+        logger.log(logger.ERROR, 'IMAGE ROUTER: responding with 404 !image');
+        return next(new HttpError(404, 'image not found'));
       }
-      logger.log(logger.INFO, 'IMAGE ROUTER: no content');
-      return s3Remove(image.url);
-    })
-    .then(() => {
+      logger.log(logger.INFO, 'IMAGE ROUTER: responding with 204 status code');
       return response.sendStatus(204);
-    })
-    .catch(next);
+    });
 });
 
-
 export default imageRouter;
+
+// console.log('before delete route');
+// imageRouter.delete('api/images/:id', bearerAuthMiddleWare, (request, response, next) => {
+//   if (!request.params.id) {
+//     console.log('IMAGE ROUTER: responding with a 404 !image_id');
+//     console.log('inside if statement of delete');
+//     return next(new HttpError(404, 'image not found '));
+//   }
+//   return Image.findByIdAndRemove(request.params.id)
+//     .then((image) => {
+//       if (!image) {
+//         return next(new HttpError(401, 'IMAGE ROUTER: no image found, bad request'));
+//       }
+//       logger.log(logger.INFO, 'IMAGE ROUTER: no content');
+//       return s3Remove(image.url);
+//     })
+//     .then(() => {
+//       console.log('inside delete .then');
+//       return response.sendStatus(204);
+//     })
+//     .catch(next);
+// });
